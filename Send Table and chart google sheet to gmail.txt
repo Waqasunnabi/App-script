@@ -1,0 +1,142 @@
+// @ts-nocheck
+function sendMailWithTable() {
+ 
+   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Summary");
+   var MessageList = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Run").getRange("c2").getValue();
+   var bodyEmail = '<p style="font-size:20px">' + MessageList + '</p>';
+   var emaillist = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Run").getRange("A2").getValue();
+   var SubjectList = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Run").getRange("B2").getValue();
+   var lastcolumn = sheet.getLastColumn();
+ 
+   var totalRows = 7;
+   var totalCols = lastcolumn;
+
+   /// Table Format
+
+  var TABLEFORMAT = 'cellspacing="2" cellpadding="2" dir="ltr" border="1" style="width:1200px;table-layout:fixed;font-size:10pt;font-family:arial,sans,sans-serif;border-collapse:collapse;border:1px solid black;font-weight:normal;color:black;background-color:white;text-align:center;text-decoration:none;font-style:normal;border-spacing: 30px;'
+    var htmltable = '<table ' + TABLEFORMAT +' ">';
+
+
+  /// Table1 01
+
+   var colVal = "";
+ 
+   for (var rowNo = 1; rowNo  <= totalRows; rowNo ++) {
+     htmltable = htmltable + "<tr height=40px'>"
+     for (var colNo = 1; colNo <=totalCols; colNo++) {
+       colVal = sheet.getRange(rowNo ,colNo).getDisplayValue();
+       if(rowNo==1){
+         htmltable = htmltable + "<th bgcolor=green><font color=white>" + colVal + "</font></th>";
+       }
+       else{
+         htmltable = htmltable + "<td>" + colVal + "</td>";
+       }
+     }
+     htmltable = htmltable + "</tr>"
+     }
+
+    htmltable = htmltable + '</table><br><br>';
+
+
+// Table 02
+
+   var totalRows2 = 26;
+   var totalCols2 = lastcolumn;
+   var htmltable2 = '<table ' + TABLEFORMAT +' ">';
+   
+   var colVal2 = "";
+ 
+   for (var rowNo2 = 24; rowNo2  <= totalRows2; rowNo2 ++) {
+     htmltable2 = htmltable2 + "<tr height=40px>"
+     for (var colNo2  = 1; colNo2 <=totalCols2; colNo2++) {
+       colVal2 = sheet.getRange(rowNo2 ,colNo2).getDisplayValue();
+       if(rowNo2==24){
+         htmltable2 = htmltable2 + "<th bgcolor=green><font color=white>" + colVal2 + "</th>";
+       }
+       else{
+         htmltable2 = htmltable2 + "<td>" + colVal2 + "</td>";
+       }
+     }
+     htmltable2 = htmltable2 + "</tr>"
+     }
+    
+    htmltable2 = htmltable2 + '</table><br><br>';
+
+    
+// Table 03
+
+   var totalRows3 = 74;
+   var totalCols3 = lastcolumn;
+   var htmltable3 = '<table ' + TABLEFORMAT +' ">';
+
+   
+   var colVal3 = "";
+ 
+   for (var rowNo3 = 42; rowNo3  <= totalRows3; rowNo3 ++) {
+     htmltable3 = htmltable3 + "<tr height=40px>"
+     for (var colNo3  = 1; colNo3 <=totalCols3; colNo3++) {
+       colVal3 = sheet.getRange(rowNo3 ,colNo3).getDisplayValue();
+       if(rowNo3==42){
+         htmltable3 = htmltable3 + "<th bgcolor=green><font color=white>" + colVal3 + "</th>";
+       }
+       else{
+         htmltable3 = htmltable3 + "<td>" + colVal3 + "</td>";
+       }
+     }
+     htmltable3 = htmltable3 + "</tr>"
+     }
+    
+    htmltable3 = htmltable3 + '</table><br><br>';
+
+// Table 04
+
+   var totalRows4 = 129;
+   var totalCols4 = lastcolumn;
+   var htmltable4 = '<table ' + TABLEFORMAT +' ">';
+
+   
+   var colVal3 = "";
+ 
+   for (var rowNo4 = 97; rowNo4  <= totalRows4; rowNo4 ++) {
+     htmltable4 = htmltable4 + "<tr height=40px>"
+     for (var colNo4  = 1; colNo4 <=totalCols4; colNo4++) {
+       colVal4 = sheet.getRange(rowNo4 ,colNo4).getDisplayValue();
+       if(rowNo4==97){
+         htmltable4 = htmltable4 + "<th bgcolor=green><font color=white>" + colVal4 + "</th>";
+       }
+       else{
+         htmltable4 = htmltable4 + "<td>" + colVal4 + "</td>";
+       }
+     }
+     htmltable4 = htmltable4 + "</tr>"
+     }
+    
+    htmltable4 = htmltable4 + '</table><br><br>';
+
+    
+
+
+    /// Chart convate as a Image
+
+  const chartBlobs = new Array(); 
+  const emailImages = {};
+  const charts = sheet.getCharts();
+  
+  charts.forEach(function(chart, i){
+    chartBlobs[i] = chart.getAs("image/png");
+    emailImages["chart"+i] = chartBlobs[i];
+  });
+
+
+    /// Gmail send 
+
+
+     bodyEmail=bodyEmail + htmltable + htmltable2 + htmltable3 + htmltable4
+     
+     
+ 
+    GmailApp.sendEmail(emaillist,SubjectList,"",{htmlBody:bodyEmail,inlineImages:emailImages});
+  
+
+
+   }

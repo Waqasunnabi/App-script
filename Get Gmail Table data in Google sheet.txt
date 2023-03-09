@@ -1,0 +1,39 @@
+function importEmails() {
+  var sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1L7Qqk6GmaeT0Iz2rm-4zyr7ZW96qOEXODHK3kFx6ls4/edit#gid=539399087").getSheetByName("Getmail")
+  
+  var threads = GmailApp.search("label:name")
+
+  
+  if(threads.length > 0){
+    
+    var messages = threads[0].getMessages();
+    var bodyhtml = messages[0].getBody()
+    var datea = new Date(messages[0].getDate().setSeconds(00))
+    var csvdata = []
+
+    var a = bodyhtml.slice(bodyhtml.search("<tbody>")+7,bodyhtml.search("</tbody>"))
+        var b = a.replaceAll("<tr>","")
+        var c = b.replaceAll(/\n/g,"").replaceAll("            ", "").replaceAll("          ","").replaceAll("\r","")
+        var table = c.split("</tr>")
+
+
+    for (var i = 1; i < table.length; i = i + 1){
+      var tablerow = table[i-1].replaceAll("<td>","").split("</td>")
+      tablerow.pop()
+      csvdata.push(tablerow)
+
+      tablerow.push(datea)
+
+      var lastRow = sheet.getLastRow();
+      var columnBLastRow = sheet.getRange(1, 2, lastRow, 1).getValues().filter(String).length +1;
+
+     sheet.getRange("A" + columnBLastRow +  ":" +  "X" + columnBLastRow ).setValues([tablerow])
+         
+    }
+
+    var csv = csvdata.map(row => row.join(",")).join("\n");
+    var file = DriveApp.createFile("data.txt", csv);
+    console.log(file.getUrl())
+
+  }
+}
