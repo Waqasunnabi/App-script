@@ -1,5 +1,5 @@
 function importEmails() {
-  var sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1L7Qqk6GmaeT0Iz2rm-4zyr7ZW96qOEXODHK3kFx6ls4/edit#gid=539399087").getSheetByName("Getmail")
+  var sheet = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/00000000000000000000000000000").getSheetByName("Getmail")
   
   var threads = GmailApp.search("label:name")
 
